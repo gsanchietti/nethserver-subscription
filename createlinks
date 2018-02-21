@@ -33,3 +33,14 @@ event_actions($event, qw(
       initialize-default-databases 00
 ));
 
+
+#
+# nethserver-subscription-save event
+#
+
+$event = 'nethserver-subscription-save';
+
+event_actions($event, qw(
+      nethserver-subscription-yum-cleanall 20
+));
+
