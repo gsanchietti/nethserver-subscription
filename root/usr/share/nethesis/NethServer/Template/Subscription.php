@@ -40,7 +40,7 @@ $view->includeJavascript("
     }
     $('#regNowBtn').button();
     $('#regNowBtn').on('click', function() { 
-        window.open('http://www.nethserver.org?action=register', '_blank');
+        window.open('https://my.nethserver.com?action=newServer', '_blank');
         $('#regForm').show();
         $('#subscriptionPlans').hide();
     });
