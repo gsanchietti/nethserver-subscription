@@ -12,6 +12,14 @@ Requires: nethserver-base
 BuildRequires: perl
 BuildRequires: nethserver-devtools
 
+
+%package ui
+Summary: Web Interface for subscription
+Requires: %{name} = %{version}-%{release}
+%description ui
+%files ui -f %{name}-%{version}-filelist-ui
+
+
 %description
 NethServer Enterprise subscription
 
@@ -26,9 +34,10 @@ rm -rf %{buildroot}
 (cd root; find . -depth -print | cpio -dump %{buildroot})
 %{genfilelist} %{buildroot} > %{name}-%{version}-filelist
 echo "%doc COPYING" >> %{name}-%{version}-filelist
+grep -e php$ -e rst$ -e html$ %{name}-%{version}-filelist > %{name}-%{version}-filelist-ui
+grep -v /usr/share/nethesis/NethServer %{name}-%{version}-filelist > %{name}-%{version}-filelist-core
 
-
-%files -f %{name}-%{version}-filelist
+%files -f %{name}-%{version}-filelist-core
 %defattr(-,root,root)
 %dir %{_nseventsdir}/%{name}-update
 
