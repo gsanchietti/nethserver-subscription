@@ -12,6 +12,7 @@ Configuration is stored inside the ``configuration`` database under the ``subscr
 Properties:
 
 - ``AlertsUrl``: URL used to send alerts and heartbeat
+- ``AlertsAutoUpdates``: if set to ``enabled``, custom alerts will be downloaded each night from ``AlertsUrl``.
 - ``InventoryUrl``: URL used to send server inventory
 - ``SystemId``: system unique id
 
