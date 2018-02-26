@@ -1,0 +1,34 @@
+{
+    $systemId = $subscription{'SystemId'} || "";
+    $secret = $subscription{'Secret'} || "";
+
+    if ($systemId eq "" || $secret eq "") {
+        return "";
+    }
+
+    my %repos = (
+        "sb-base" => { name => 'CentOS Base', path => 'base', key => 'RPM-GPG-KEY-CentOS-$releasever' },
+        "sb-updates" => { name => 'CentOS Updates', path => 'upadtes', key => 'RPM-GPG-KEY-CentOS-$releasever' },
+        "sb-extras" => { name => 'CentOS Extras', path => 'extras', key => 'RPM-GPG-KEY-CentOS-$releasever' },
+        "sb-epel" => { name => 'EPEL', path => 'epel', key => 'RPM-GPG-KEY-EPEL-$releasever' },
+        "sb-centos-sclo-rh" => { name => 'SCLo rh', path => 'centos-sclo-rh', key => 'RPM-GPG-KEY-CentOS-SIG-SCLo' },
+        "sb-centos-sclo-sclo" => { name => 'SCLo sclo', path => 'centos-sclo-sclo', key => 'RPM-GPG-KEY-CentOS-SIG-SCLo' },
+        "sb-ethserver-updates" => { name => 'NethServer Updates', path => 'nethserver-updates', key => 'RPM-GPG-KEY-NethServer-$releasever' },
+        "sb-ethserver-base" => { name => 'NethServer Base', path => 'nethserver-base', key => 'RPM-GPG-KEY-NethServer-$releasever' },
+    );
+
+    foreach my $repo (keys %repos) {
+        $OUT .= "[$repo]\n";
+        $OUT .= "name=Stable mirror: ".$repos{$repo}{'name'}." \$releasever\n";
+        $OUT .= "mirrorlist=http://mirrorlist.nethserver.com/repo=".$repos{$repo}{'path'}."&nsrelease=\$nsrelease&arch=\$basearch\&serverid=\$serverid&usetier=\$YUM0\n";
+        $OUT .= "gpgkey=file:///etc/pki/rpm-gpg/".$repos{$repo}{'key'}."\n";
+        $OUT .= "username=".$subscription{'SystemId'}."\n";
+        $OUT .= "password=".$subscription{'Secret'}."\n";
+        $OUT .= "gpgcheck=1\n";
+        $OUT .= "enablegroups=0\n";
+        $OUT .= "enabled=1\n";
+        $OUT .= "http_caching=none\n";
+        $OUT .= "\n";
+    }
+}
+
