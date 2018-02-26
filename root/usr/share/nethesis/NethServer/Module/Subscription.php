@@ -89,7 +89,7 @@ class Subscription extends \Nethgui\Controller\AbstractController
 
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
-        $view['PricingUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
+        $view['SubscriptionUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','SubscriptionUrl');
         $view['SubscriptionPlan'] = $this->readSubscriptionPlan();
         $view['SystemId'] = $this->readSystemId();
     }
