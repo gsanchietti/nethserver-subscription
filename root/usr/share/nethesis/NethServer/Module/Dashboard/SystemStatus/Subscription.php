@@ -41,25 +41,13 @@ class Subscription extends \Nethgui\Controller\AbstractController
         return $this->systemId;
     }
 
-    private function readSubscriptionPlan()
-    {
-        if (!$this->subscriptionPlan && $this->systemId) {
-            // TODO: call remote API
-            $this->subscriptionPlan = "";
-        }
-        return $this->subscriptionPlan;
-    }
-
-
     public function process()
     {
         $this->readSystemId();
-        $this->readSubscriptionPlan();
     }
  
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         $view['SystemId'] = $this->readSystemId();
-        $view['SubscriptionPlan'] = $this->readSubscriptionPlan();
     }
 }
