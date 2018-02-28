@@ -28,7 +28,8 @@
         $OUT .= "enablegroups=0\n";
         $OUT .= "enabled=1\n";
         $OUT .= "http_caching=none\n";
+        $OUT .= "mirrorlist_expire=7200\n"; # 2 hours
+        $OUT .= "metadata_expire=7200\n";
         $OUT .= "\n";
     }
 }
-
