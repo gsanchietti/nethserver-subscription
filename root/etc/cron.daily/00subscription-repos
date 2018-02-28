@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#
+# Restore YUM configuration before running updates
+#
+
+systemId=$(/sbin/e-smith/config getprop subscription SystemId)
+secret=$(/sbin/e-smith/config getprop subscription Secret)
+
+if [ "$systemId" != "" ] && [ "$secret" != "" ]; then
+    /etc/e-smith/events/actions/nethserver-subscription-eorepo
+fi
