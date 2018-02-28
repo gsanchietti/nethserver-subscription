@@ -33,6 +33,9 @@ event_actions($event, qw(
       initialize-default-databases 00
 ));
 
+event_templates($event, qw(
+    /etc/yum.repos.d/subscription.repo
+));
 
 #
 # nethserver-subscription-save event
@@ -42,5 +45,9 @@ $event = 'nethserver-subscription-save';
 
 event_actions($event, qw(
       nethserver-subscription-yum-cleanall 20
+      nethserver-subscription-eorepo 30
 ));
 
+event_templates($event, qw(
+    /etc/yum.repos.d/subscription.repo
+));
