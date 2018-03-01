@@ -24,8 +24,8 @@ Example: ::
  subscription=configuration
     AlertsAutoUpdates=enabled
     AlertsUrl=https://my.nethserver.com/api/
-    ApiUrl=http://my.nethserver.com/api
-    InventoryUrl=http://192.168.5.22:8080/api/inventories/store
+    ApiUrl=http://my.nethserver.com/api/
+    InventoryUrl=http://my.nethserver.com/api/inventories/store/
     Secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     SubscriptionUrl=https://www.nethserver.org/subscription/
     SystemId=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
