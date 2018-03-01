@@ -45,6 +45,7 @@ $event = 'nethserver-subscription-save';
 
 event_actions($event, qw(
       nethserver-subscription-yum-cleanall 20
+      nethserver-subscription-register 20 
       nethserver-subscription-eorepo 30
 ));
 

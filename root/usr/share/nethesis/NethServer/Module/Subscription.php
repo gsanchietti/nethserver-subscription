@@ -37,7 +37,7 @@ class Subscription extends \Nethgui\Controller\AbstractController
     public function initialize()
     {
         parent::initialize();
-        $this->declareParameter('RegistrationKey', Validate::NOTEMPTY);
+        $this->declareParameter('RegistrationKey', $this->createValidator()->maxLength(64)->minLength(64), array('configuration', 'subscription', 'Secret'));
     }
 
     private function readSystemId()
@@ -48,32 +48,13 @@ class Subscription extends \Nethgui\Controller\AbstractController
         return $this->systemId;
     }
 
-   public function process()
-    {
-        parent::process();
-        if($this->getRequest()->isMutation()) {
-            $parts = split(":", $this->parameters['RegistrationKey']);
-            $this->getPlatform()->getDatabase('configuration')->setProp('subscription', array('SystemId' => $parts[0], 'Secret' => $parts[1]));
-            $this->getPlatform()->signalEvent('nethserver-subscription-save');
-        }
-    }
-
-    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
-    {
-        if ($this->getRequest()->isMutation()) {
-            $this->getValidator('RegistrationKey')->regexp('/(.)+:(.)+/i');
-        }
-        parent::validate($report);
-    }
-
-
     private function readSubscriptionPlan()
     {
         if (!$this->subscriptionPlan) {
             $secret = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','Secret');
             $apiUrl = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','ApiUrl');
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "$apiUrl/machine/info/".$this->readSystemId());
+            curl_setopt($ch, CURLOPT_URL, $apiUrl."machine/info/");
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: token $secret", "Content-type: application/json"));
@@ -86,10 +67,15 @@ class Subscription extends \Nethgui\Controller\AbstractController
         return $this->subscriptionPlan;
     }
 
+    protected function onParametersSaved($changedParameters)
+    {
+        parent::onParametersSaved($changedParameters);
+        $this->getPlatform()->signalEvent('nethserver-subscription-save');
+    }
 
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
-        $view['SubscriptionUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','SubscriptionUrl');
+        $view['PricingUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
         $view['SubscriptionPlan'] = $this->readSubscriptionPlan();
         $view['SystemId'] = $this->readSystemId();
     }
