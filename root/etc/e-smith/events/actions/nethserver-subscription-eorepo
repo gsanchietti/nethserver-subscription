@@ -42,3 +42,7 @@ exec /sbin/e-smith/eorepo \
     sb-centos-sclo-sclo \
     sb-nethserver-base \
     sb-nethserver-updates
+
+# Enable tiers for yum-cron
+
+grep -q -F 'export YUM0=yes' /etc/sysconfig/run-parts || echo 'export YUM0=yes' >> /etc/sysconfig/run-parts
