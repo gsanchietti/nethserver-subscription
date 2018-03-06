@@ -1,0 +1,6 @@
+#
+# 10repotiers
+#
+# Enable tiers for YUM repositories
+#
+export YUM0=yes
