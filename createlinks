@@ -31,6 +31,7 @@ my $event = 'nethserver-subscription-update';
 
 event_actions($event, qw(
       initialize-default-databases 00
+      nethserver-subscription-eorepo 30
 ));
 
 event_templates($event, qw(

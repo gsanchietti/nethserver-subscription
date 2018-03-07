@@ -26,6 +26,13 @@
 # Enable only known YUM repositories
 #
 
+systemId=$(/sbin/e-smith/config getprop subscription SystemId)
+secret=$(/sbin/e-smith/config getprop subscription Secret)
+
+if [ "$systemId" = "" ] && [ "$secret" = "" ]; then
+    exit 0
+fi
+
 exec /sbin/e-smith/eorepo \
     sb-base \
     sb-updates \
