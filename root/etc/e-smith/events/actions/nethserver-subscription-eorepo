@@ -33,6 +33,9 @@ if [ "$systemId" = "" ] && [ "$secret" = "" ]; then
     exit 0
 fi
 
+# Make sure SystemId and Secret have a value
+/sbin/e-smith/expand-template /etc/yum.repos.d/subscription.repo
+
 exec /sbin/e-smith/eorepo \
     sb-base \
     sb-updates \
