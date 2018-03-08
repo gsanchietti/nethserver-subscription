@@ -8,6 +8,7 @@ Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
 Requires: nethserver-base
+Requires: nethserver-yum-cron
 
 BuildRequires: perl
 BuildRequires: nethserver-devtools
