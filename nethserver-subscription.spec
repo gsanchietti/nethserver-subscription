@@ -17,6 +17,7 @@ Requires: nethserver-collectd
 Requires: nethserver-lib
 Requires: python-requests
 Requires: curl
+Requires: puppet-agent
 
 %description
 NethServer Subscriptions
