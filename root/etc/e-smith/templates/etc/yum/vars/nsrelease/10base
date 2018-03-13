@@ -1,9 +1,12 @@
 {
+    #
+    # 10base
+    #
     $systemId = $subscription{'SystemId'} || "";
-    $secret = $subscription{'Secret'} || "";
-    if ($systemId ne "" && $secret ne "") {
+
+    if ($systemId ne "") {
         $OUT = $subscription{'NsRelease'};
     } else {
-        return '';
+        $OUT = '';
     }
 }
