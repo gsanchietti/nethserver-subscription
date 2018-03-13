@@ -7,6 +7,11 @@ URL: %{url_prefix}/%{name}
 Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
+Provides: nethserver-inventory = %{version}
+Obsoletes: nethserver-inventory < %{version}
+Provides: nethserver-alerts = %{version} 
+Obsoletes: nethserver-alerts < %{version}
+
 BuildRequires: nethserver-devtools
 BuildRequires: gettext
 BuildRequires: python2-devel
@@ -23,7 +28,7 @@ Requires: puppet-agent
 NethServer Subscriptions
 
 %prep
-%setup
+%setup -q
 
 %build
 %{makedocs}
