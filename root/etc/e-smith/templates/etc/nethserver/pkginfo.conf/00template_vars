@@ -1,0 +1,20 @@
+{
+    #
+    # 00template_vars
+    #
+    my $systemId = $subscription{'SystemId'} || '';
+    my $secret = $subscription{'Secret'} || '';
+    $enabled = ($systemId eq '' || $secret eq '') ? 0 : 1;
+
+    if($enabled) {
+        @repo_list = qw(
+            sb-nethserver-updates
+        );
+    } else {
+        @repo_list = qw(
+            nethserver-updates
+            nethforge
+        );
+    }
+    '';
+}
