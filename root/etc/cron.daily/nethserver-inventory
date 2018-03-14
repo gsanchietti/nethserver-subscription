@@ -22,11 +22,4 @@
 
 # Send the inventory
 
-SECRET=$(/sbin/e-smith/config getprop subscription Secret)
-
-if [ ! -z $SECRET ]; then
-    SECRET="-k $SECRET"
-fi
-
-exec timeout -k 180 120 /usr/sbin/nethserver-inventory -u $(/sbin/e-smith/config getprop subscription InventoryUrl) -s $(/sbin/e-smith/config getprop subscription SystemId) $SECRET
-
+exec /etc/e-smith/events/actions/nethserver-inventory-send

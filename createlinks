@@ -152,4 +152,9 @@ event_actions('restore-yumrepos', qw(
     nethserver-subscription-eorepo
 ));
 
-
+#
+# post-restore-data event
+#
+event_actions('post-restore-data', qw(
+    nethserver-inventory-send 95
+));

@@ -22,5 +22,13 @@
 
 # Send the inventory
 
-exec /etc/cron.daily/nethserver-inventory
+SystemId=$(/sbin/e-smith/config getprop subscription SystemId)
+Secret=$(/sbin/e-smith/config getprop subscription Secret)
+InventoryUrl=$(/sbin/e-smith/config getprop subscription InventoryUrl)
+
+if [[ -z ${SystemId} ]]; then
+    exit 0
+fi
+
+exec timeout -k 180 120 /usr/sbin/nethserver-inventory -u ${InventoryUrl} -s ${SystemId} ${Secret:+-k ${Secret}}
 
