@@ -52,6 +52,19 @@ Configuration
   config setprop subscription InventoryUrl https://my.nethesis.it/isa/inventory/store
   signal-event nethserver-subscription-update
 
+
+Restore original NethServer repositories
+========================================
+
+Once NethServer Subscriptions is activated, YUM configuration is changed to
+contact the subscribed repositories. To revert the system configuration to its
+initial state and use the original NethServer repositories run ::
+
+  config setprop subscription SystemId '' Secret ''
+  signal-event nethserver-subscription-update
+  eorepo base updates extras epel centos-sclo-rh centos-sclo-sclo nethserver-base nethserver-updates
+
+
 Alerts
 ======
 
