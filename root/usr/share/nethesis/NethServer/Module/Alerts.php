@@ -31,9 +31,14 @@ class Alerts extends \Nethgui\Controller\TableController
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $attributes)
     {
-        return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
-            'category' => 'Management')
-        );
+        // currently this module is available only for Enterprise subscriptions
+        if (file_exists("/etc/e-smith/db/configuration/defaults/nethupdate/type")) {
+            return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
+                'category' => 'Management')
+            );
+        } else {
+            return new \NethServer\Tool\CustomModuleAttributesProvider($attributes);
+        }
     }
 
     public function initialize()
@@ -114,7 +119,9 @@ class Alerts extends \Nethgui\Controller\TableController
     {
         parent::prepareView($view);
         if (isset($view['read'])) {
-            $view['read']['Url'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription', 'AlertsUrl');
+            $url_parts = parse_url($this->getPlatform()->getDatabase('configuration')->getProp('subscription', 'AlertsUrl'));
+            $view['read']['Url'] = $url_parts['scheme']."://".$url_parts['host'];
+
             $view['read']->setTemplate('NethServer\Template\Alerts');
             $view['read']['updated'] = '-';
             if ( file_exists('/var/lib/nethserver/db/alerts') ) {
