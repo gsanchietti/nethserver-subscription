@@ -33,20 +33,21 @@ fi
 # Override default repositories with eorepo.conf
 eorepo_cfg=/etc/nethserver/eorepo.conf
 if [[ -r ${eorepo_cfg} ]]; then
-    repositories=$(grep -vE '^#' ${eorepo_cfg})
+    repositories=($(grep -vE '^#' ${eorepo_cfg}))
 fi
 
-if [[ -z ${repositories} ]]; then
-    repositories= \
-        sb-base \
-        sb-updates \
-        sb-epel \
-        sb-extras \
-        sb-centos-sclo-rh \
-        sb-centos-sclo-sclo \
-        sb-nethserver-base \
+if [[ ${#repositories[@]} -eq 0 ]]; then
+    repositories=(
+        sb-base
+        sb-updates
+        sb-epel
+        sb-extras
+        sb-centos-sclo-rh
+        sb-centos-sclo-sclo
+        sb-nethserver-base
         sb-nethserver-updates
+    )
 fi
 
-echo "[NOTICE] eorepo ${repositories}"
-exec /sbin/e-smith/eorepo ${repositories}
+echo "[NOTICE] eorepo ${repositories[*]}"
+exec /sbin/e-smith/eorepo ${repositories[*]}
