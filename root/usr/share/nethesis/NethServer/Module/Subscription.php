@@ -26,66 +26,73 @@ use Nethgui\System\PlatformInterface as Validate;
  * Mange NethServer Enterprise subscription
  * 
  */
-class Subscription extends \Nethgui\Controller\AbstractController
+class Subscription extends \Nethgui\Controller\CompositeController
 {
 
-    protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $base)
+    protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $attributes)
     {
-        return \Nethgui\Module\SimpleModuleAttributesProvider::extendModuleAttributes($base, 'Management');
+        // currently this module is available only for Community
+        if ( ! @file_exists("/etc/e-smith/db/configuration/defaults/nethupdate/type")) {
+            return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
+                'category' => 'Administration')
+            );
+        } else {
+            return new \NethServer\Tool\CustomModuleAttributesProvider($attributes);
+        }
     }
 
     public function initialize()
     {
         parent::initialize();
-        $this->declareParameter('RegistrationKey', $this->createValidator()->maxLength(64)->minLength(64), array('configuration', 'subscription', 'Secret'));
+        $this->loadChildrenDirectory();
     }
 
-    private function readSystemId()
+    
+    public function readSubscriptionPlan($secret = NULL)
     {
-        if (!$this->systemId) {
-            $this->systemId = $this->getPlatform()->getDatabase('configuration')->getProp('subscription', 'SystemId');
+        static $result;
+        if(isset($result)) {
+            return $result;
         }
-        return $this->systemId;
-    }
-
-    private function readSubscriptionPlan()
-    {
-        if (!$this->subscriptionPlan) {
-            $secret = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','Secret');
-            $apiUrl = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','ApiUrl');
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $apiUrl."machine/info/");
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: token $secret", "Content-type: application/json"));
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
-            $result = curl_exec($ch); 
-            curl_close($ch);
-
-            $this->subscriptionPlan = json_decode($result, true);
+        
+        $apiUrl = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','ApiUrl');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl."machine/info/");
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: token $secret", "Content-type: application/json"));
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if($http_code == 200) {
+            $result = json_decode($response, true);
+        } elseif($http_code == 401) {
+            $result = json_decode($response, true);
+        } else {
+            $this->getLog()->warning(sprintf("%s::%s() http status %s: %s", __CLASS__, __FUNCTION__, $http_code, $response));
+            $result = FALSE;
         }
-        return $this->subscriptionPlan;
+        curl_close($ch);
+        return $result;
     }
 
-    protected function onParametersSaved($changedParameters)
-    {
-        parent::onParametersSaved($changedParameters);
-        $this->getPlatform()->signalEvent('nethserver-subscription-save');
-    }
-
-    public function prepareView(\Nethgui\View\ViewInterface $view)
-    {
-        $view['PricingUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
-        $view['SubscriptionPlan'] = $this->readSubscriptionPlan();
-        $view['SystemId'] = $this->readSystemId();
-    }
-
-    public function nextPath()
-    {
-        if($this->getRequest()->isMutation()) {
-            return "Subscription";
+    public function bind(\Nethgui\Controller\RequestInterface $request)
+    {   
+        $cdb = $this->getPlatform()->getDatabase('configuration');
+        $firstModuleIdentifier = 'Register';
+        if($cdb->getProp('subscription', 'SystemId')) {
+            $firstModuleIdentifier = 'Properties';
         }
-        return FALSE;
+        $this->sortChildren(function ($a, $b) use ($firstModuleIdentifier) {
+             if($a->getIdentifier() === $firstModuleIdentifier) {
+                 $c = -1;
+             } elseif($b->getIdentifier() === $firstModuleIdentifier) {
+                 $c = 1;
+             } else {
+                 $c = 0;
+             }
+             return $c;
+        });
+        parent::bind($request);
     }
-
 }

@@ -51,7 +51,6 @@ event_services('nethserver-subscription-update', qw(
 #
 
 event_actions('nethserver-subscription-save', qw(
-      nethserver-subscription-register 02 
       nethserver-subscription-yum-cleanall 20
       nethserver-subscription-eorepo 30
       nethserver-inventory-send 30

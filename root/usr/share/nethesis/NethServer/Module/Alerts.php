@@ -32,7 +32,7 @@ class Alerts extends \Nethgui\Controller\TableController
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $attributes)
     {
         // currently this module is available only for Enterprise subscriptions
-        if (file_exists("/etc/e-smith/db/configuration/defaults/nethupdate/type")) {
+        if (@file_exists("/etc/e-smith/db/configuration/defaults/nethupdate/type")) {
             return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
                 'category' => 'Management')
             );
