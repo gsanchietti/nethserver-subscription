@@ -20,14 +20,15 @@
 # along with NethServer.  If not, see COPYING.
 #
 
-#
-# Restore YUM configuration before running updates
-#
+# Send the inventory
 
-systemId=$(/sbin/e-smith/config getprop subscription SystemId)
-if [[ -z ${systemId} ]]; then
+SystemId=$(/sbin/e-smith/config getprop subscription SystemId)
+Secret=$(/sbin/e-smith/config getprop subscription Secret)
+InventoryUrl=$(/sbin/e-smith/config getprop subscription InventoryUrl)
+
+if [[ -z ${SystemId} ]]; then
     exit 0
 fi
-exec >/dev/null
-/etc/e-smith/events/actions/nethserver-subscription-yum-cleanall
-/etc/e-smith/events/actions/nethserver-subscription-eorepo
+
+exec timeout -k 180 120 /usr/sbin/nethserver-inventory -u ${InventoryUrl} -s ${SystemId} ${Secret:+-k ${Secret}}
+

@@ -27,33 +27,133 @@ use esmith::Build::CreateLinks qw(:all);
 # nethserver-subscription-update event
 #
 
-my $event = 'nethserver-subscription-update';
+event_templates('nethserver-subscription-update', qw(
+    /etc/yum.repos.d/subscription.repo
+    /etc/yum/vars/nsrelease
+    /etc/sysconfig/run-parts
+    /etc/collectd.d/threshold.conf
+    /etc/collectd.d/filter.conf
+    /etc/collectd.d/ping.conf
+    /etc/nethserver/pkginfo.conf
+));
 
-event_actions($event, qw(
+event_actions('nethserver-subscription-update', qw(
       initialize-default-databases 00
       nethserver-subscription-eorepo 30
 ));
 
-event_templates($event, qw(
-    /etc/yum.repos.d/subscription.repo
-    /etc/yum/vars/nsrelease
-    /etc/sysconfig/run-parts
+event_services('nethserver-subscription-update', qw(
+    collectd restart
 ));
 
 #
 # nethserver-subscription-save event
 #
 
-$event = 'nethserver-subscription-save';
-
-event_actions($event, qw(
-      nethserver-subscription-register 02 
+event_actions('nethserver-subscription-save', qw(
       nethserver-subscription-yum-cleanall 20
       nethserver-subscription-eorepo 30
+      nethserver-inventory-send 30
 ));
 
-event_templates($event, qw(
+event_templates('nethserver-subscription-save', qw(
     /etc/yum.repos.d/subscription.repo
     /etc/yum/vars/nsrelease
     /etc/sysconfig/run-parts
+    /etc/collectd.d/threshold.conf
+    /etc/nethserver/pkginfo.conf
+));
+
+event_services('nethserver-subscription-save', qw(
+    collectd restart
+));
+
+
+#
+# nethserver-backup-data-update event
+#
+
+event_templates('nethserver-backup-data-update', qw(
+   /etc/collectd.d/threshold.conf
+   /etc/collectd.d/filter.conf
+));
+
+
+#
+# nethserver-collectd-save event
+#
+
+event_templates('nethserver-collectd-save', qw(
+  /etc/collectd.d/threshold.conf
+  /etc/collectd.d/filter.conf
+));
+
+#
+# nethserver-collectd-update event
+#
+
+event_templates('nethserver-collectd-update', qw(
+  /etc/collectd.d/threshold.conf
+  /etc/collectd.d/filter.conf
+));
+
+
+#
+# interface-update event
+#
+
+event_actions('interface-update', qw(
+    nethserver-alerts-reset-wan   03
+));
+
+#
+# wan-uplink-update event
+#
+
+event_actions('wan-uplink-update', qw(
+    nethserver-alerts-lsm-update 60
+));
+
+#
+# nethserver-alerts-save event
+#
+
+event_templates('nethserver-alerts-save', qw(
+   /etc/collectd.d/threshold.conf
+   /etc/collectd.d/filter.conf
+   /etc/collectd.d/ping.conf
+));
+
+event_actions('nethserver-alerts-save', qw(
+    nethserver-alerts-update-alertsdb   02
+));
+
+event_services('nethserver-alerts-save', qw(
+    collectd restart
+));
+
+
+#
+# pre-restore-config event
+#
+event_actions('pre-restore-config', qw(
+    nethserver-subscription-restore-yumrepos 20
+));
+
+#
+# restore-yumrepos event
+#
+event_templates('restore-yumrepos', qw(
+    /etc/yum.repos.d/subscription.repo
+));
+
+event_actions('restore-yumrepos', qw(
+    nethserver-subscription-eorepo
+));
+
+#
+# post-restore-data event
+#
+event_actions('post-restore-data', qw(
+    nethserver-inventory-send 95
 ));

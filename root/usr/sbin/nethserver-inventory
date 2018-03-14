@@ -1,0 +1,105 @@
+#!/bin/bash
+#
+# Copyright (C) 2018 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+#
+# Send facter inventory to remote host
+#
+
+function exit_error {
+    echo "$1" >&2
+    exit 1
+}
+
+function print_help {
+    echo "Usage: $0 [-u <url>] [-j <json_file>] [-s <systemid>] [-k <secret_key>] [-d] [-h]"
+    echo "  -u send data to given URL"
+    echo "  -j read data from given file in JSON format"
+    echo "  -s System ID"
+    echo "  -k secret key (optional)"
+    echo "  -d enable debug"
+    echo "  -h show this help"
+    exit 0
+}
+
+while getopts ":u:j:s:k:hd" opt; do
+  case $opt in
+    u)
+      url=$OPTARG
+      ;;
+    j)
+      json=$OPTARG
+      ;;
+    s)
+      systemid=$OPTARG
+      ;;
+    k)
+      secret=$OPTARG
+      ;;
+    h)
+      print_help
+      ;;
+    d)
+      debug='-v'
+      ;;
+    \?)
+      exit_error "Invalid option: -$OPTARG"
+      ;;
+  esac
+done
+
+if [ ! -z $debug ]; then
+   set -xv
+else
+   debug='-s -o /dev/null'
+fi
+
+if [ "x$url" = "x" ]; then
+    exit_error "Invalid URL"
+fi
+
+if [ "x$systemid" = "x" ]; then
+    exit_error "Invalid System ID"
+fi
+
+if [ "x$json" = "x" ]; then
+    json=`/opt/puppetlabs/puppet/bin/facter -j`
+else
+    if [ -f $json ]; then
+        json=`/bin/cat $json`
+    else
+        exit_error "No such file or directory: $json"
+    fi
+fi
+
+TMP=`mktemp`
+
+trap "{ rm -f $TMP; }" SIGINT SIGTERM EXIT
+
+echo "{\"data\": {\"lk\": \"$systemid\", \"data\": $json}}" > $TMP
+
+code=`/usr/bin/curl $debug -L -w "%{http_code}" -X POST \
+   --header "Authorization: token $secret" $auth --header "Content-Type: application/json" --header "Accept: application/json"  \
+   --data-binary @$TMP \
+   $url`
+
+if [ "$code" != "200" ]; then
+   exit 1
+fi

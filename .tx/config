@@ -6,9 +6,13 @@ source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_S
 source_lang = en
 type = PHP_ALT_ARRAY
 
-
 [nethserver.Dashboard_SystemStatus_Subscription]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Dashboard_SystemStatus_Subscription.php
+source_lang = en
+type = PHP_ALT_ARRAY
+
+[nethserver.Alerts]
+source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Alerts.php
 source_lang = en
 type = PHP_ALT_ARRAY
 

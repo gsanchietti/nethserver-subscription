@@ -2,12 +2,11 @@
     $systemId = $subscription{'SystemId'} || "";
     $secret = $subscription{'Secret'} || "";
     $enabled = ($systemId ne "" && $secret ne "") ? 1 : 0;
-
     '';
 }
 [sb-base]
 name=Stable mirror: CentOS Base $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=base&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=base&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-$releasever
 username={$systemId}
 password={$secret}
@@ -20,7 +19,7 @@ metadata_expire=7200
 
 [sb-updates]
 name=Stable mirror: CentOS Updates $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=updates&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=updates&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-$releasever
 username={$systemId}
 password={$secret}
@@ -33,7 +32,7 @@ metadata_expire=7200
 
 [sb-extras]
 name=Stable mirror: CentOS Extras $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=extras&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=extras&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-$releasever
 username={$systemId}
 password={$secret}
@@ -46,7 +45,7 @@ metadata_expire=7200
 
 [sb-centos-sclo-rh]
 name=Stable mirror: SCLo rh $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=centos-sclo-rh&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=centos-sclo-rh&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo
 username={$systemId}
 password={$secret}
@@ -59,7 +58,7 @@ metadata_expire=7200
 
 [sb-centos-sclo-sclo]
 name=Stable mirror: SCLo sclo $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=centos-sclo-sclo&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=centos-sclo-sclo&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo
 username={$systemId}
 password={$secret}
@@ -72,7 +71,7 @@ metadata_expire=7200
 
 [sb-epel]
 name=Stable mirror: EPEL $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=epel&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=epel&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
 username={$systemId}
 password={$secret}
@@ -85,7 +84,7 @@ metadata_expire=7200
 
 [sb-nethserver-updates]
 name=Stable mirror: NethServer Updates $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=nethserver-updates&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=nethserver-updates&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-NethServer-$releasever
 username={$systemId}
 password={$secret}
@@ -98,7 +97,7 @@ metadata_expire=7200
 
 [sb-nethserver-base]
 name=Stable mirror: NethServer Base $releasever
-mirrorlist=http://mirrorlist.nethserver.com/?repo=nethserver-base&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
+mirrorlist=https://mirrorlist.nethserver.com/?repo=nethserver-base&arch=$basearch&nsversion=$nsrelease&usetier=$YUM0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-NethServer-$releasever
 username={$systemId}
 password={$secret}

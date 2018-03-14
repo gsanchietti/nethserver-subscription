@@ -23,26 +23,31 @@
 #
 # NethServer Subscription
 #
-# Enable only known YUM repositories
-#
 
+event=$1
 systemId=$(/sbin/e-smith/config getprop subscription SystemId)
-secret=$(/sbin/e-smith/config getprop subscription Secret)
-
-if [ "$systemId" = "" ] && [ "$secret" = "" ]; then
+if [[ -z ${systemId} ]]; then
     exit 0
 fi
 
-exec /sbin/e-smith/eorepo \
-    sb-base \
-    sb-updates \
-    sb-epel \
-    sb-extras \
-    sb-centos-sclo-rh \
-    sb-centos-sclo-sclo \
-    sb-nethserver-base \
-    sb-nethserver-updates
+# Override default repositories with eorepo.conf
+eorepo_cfg=/etc/nethserver/eorepo.conf
+if [[ -r ${eorepo_cfg} ]]; then
+    repositories=($(grep -vE '^#' ${eorepo_cfg}))
+fi
 
-# Enable tiers for yum-cron
+if [[ ${#repositories[@]} -eq 0 ]]; then
+    repositories=(
+        sb-base
+        sb-updates
+        sb-epel
+        sb-extras
+        sb-centos-sclo-rh
+        sb-centos-sclo-sclo
+        sb-nethserver-base
+        sb-nethserver-updates
+    )
+fi
 
-grep -q -F 'export YUM0=yes' /etc/sysconfig/run-parts || echo 'export YUM0=yes' >> /etc/sysconfig/run-parts
+echo "[NOTICE] eorepo ${repositories[*]}"
+exec /sbin/e-smith/eorepo ${repositories[*]}

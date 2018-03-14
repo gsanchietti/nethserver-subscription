@@ -20,14 +20,11 @@
 # along with NethServer.  If not, see COPYING.
 #
 
-API_URL=$(/sbin/e-smith/config getprop subscription ApiUrl)
-SECRET=$(/sbin/e-smith/config getprop subscription Secret)
+# Download alerts configuration from remote server
+# if subscription[AlertsAutoUpdates] is enabled
 
-SYSTEM_ID=$(curl -sq -L "$API_URL"machine/info/ --header "Authorization: token $SECRET" | python -c 'import sys, json; print json.load(sys.stdin)["uuid"]' 2>/dev/null)
+status=$(/sbin/e-smith/config getprop subscription AlertsAutoUpdates)
 
-if [ -z $SYSTEM_ID ]; then
-    echo "[ERROR] Registration failed"
-    exit 1
-else
-    /sbin/e-smith/config setprop subscription SystemId $SYSTEM_ID
+if [ "$status" == "enabled" ]; then
+    /sbin/e-smith/signal-event nethserver-alerts-save
 fi

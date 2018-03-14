@@ -21,13 +21,21 @@
 #
 
 #
-# Restore YUM configuration before running updates
+# Extract the configuration DB from backup to a temporary dir, and use it 
+# to restore the yum repositories configuration
 #
 
-systemId=$(/sbin/e-smith/config getprop subscription SystemId)
-if [[ -z ${systemId} ]]; then
-    exit 0
+tmpdir=$(mktemp -d /tmp/restore-yumrepos.XXXXXXX)
+trap "rm -rf ${tmpdir}" EXIT
+
+tar -x -C "${tmpdir}" -f /var/lib/nethserver/backup/backup-config.tar.xz  var/lib/nethserver/db/configuration
+
+export ESMITH_CONFIG_DB="${tmpdir}/var/lib/nethserver/db/configuration"
+
+if [[ -z $(/sbin/e-smith/config getprop subscription SystemId) ]]; then
+    exit 0;
 fi
-exec >/dev/null
-/etc/e-smith/events/actions/nethserver-subscription-yum-cleanall
-/etc/e-smith/events/actions/nethserver-subscription-eorepo
+
+echo "[NOTICE] This system has a subscription. Restoring YUM repository configuration"
+/sbin/e-smith/signal-event restore-yumrepos
+
