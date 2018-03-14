@@ -134,5 +134,22 @@ event_services('nethserver-alerts-save', qw(
 ));
 
 
+#
+# pre-restore-config event
+#
+event_actions('pre-restore-config', qw(
+    nethserver-subscription-restore-yumrepos 20
+));
+
+#
+# restore-yumrepos event
+#
+event_templates('restore-yumrepos', qw(
+    /etc/yum.repos.d/subscription.repo
+));
+
+event_actions('restore-yumrepos', qw(
+    nethserver-subscription-eorepo
+));
 
 

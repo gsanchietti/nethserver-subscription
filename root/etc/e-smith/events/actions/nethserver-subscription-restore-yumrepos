@@ -21,32 +21,21 @@
 #
 
 #
-# NethServer Subscription
+# Extract the configuration DB from backup to a temporary dir, and use it 
+# to restore the yum repositories configuration
 #
 
-event=$1
-systemId=$(/sbin/e-smith/config getprop subscription SystemId)
-if [[ -z ${systemId} ]]; then
-    exit 0
+tmpdir=$(mktemp -d /tmp/restore-yumrepos.XXXXXXX)
+trap "rm -rf ${tmpdir}" EXIT
+
+tar -x -C "${tmpdir}" -f /var/lib/nethserver/backup/backup-config.tar.xz  var/lib/nethserver/db/configuration
+
+export ESMITH_CONFIG_DB="${tmpdir}/var/lib/nethserver/db/configuration"
+
+if [[ -z $(/sbin/e-smith/config getprop subscription SystemId) ]]; then
+    exit 0;
 fi
 
-# Override default repositories with eorepo.conf
-eorepo_cfg=/etc/nethserver/eorepo.conf
-if [[ -r ${eorepo_cfg} ]]; then
-    repositories=$(grep -vE '^#' ${eorepo_cfg})
-fi
+echo "[NOTICE] This system has a subscription. Restoring YUM repository configuration"
+/sbin/e-smith/signal-event restore-yumrepos
 
-if [[ -z ${repositories} ]]; then
-    repositories= \
-        sb-base \
-        sb-updates \
-        sb-epel \
-        sb-extras \
-        sb-centos-sclo-rh \
-        sb-centos-sclo-sclo \
-        sb-nethserver-base \
-        sb-nethserver-updates
-fi
-
-echo "[NOTICE] eorepo ${repositories}"
-exec /sbin/e-smith/eorepo ${repositories}
