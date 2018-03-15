@@ -56,9 +56,7 @@ class Register extends \Nethgui\Controller\AbstractController
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         parent::prepareView($view);
-        if($this->getRequest()->isValidated()) {
-            $view['PricingUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
-        }
+        $view['PricingUrl'] = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
         if($this->getRequest()->isMutation()) {
             $this->getPlatform()->setDetachedProcessCondition('success', array(
                 'location' => array(
