@@ -39,8 +39,14 @@ cp -a lib/nethserver_alerts.py root%{python2_sitelib}
 %install
 (cd root; find . -depth -print | cpio -dump %{buildroot})
 %{genfilelist} %{buildroot} > filelist
+
+# Split UI parts from core package
 grep -E ^%{_nsuidir}/ filelist > filelist-ui
 grep -vE ^%{_nsuidir}/ filelist > filelist-core
+
+# Move Alerts UI back to core:
+grep -F Alerts filelist-ui >> filelist-core
+sed -i '/Alerts/ d' filelist-ui
 
 %files -f filelist-core
 %defattr(-,root,root)
