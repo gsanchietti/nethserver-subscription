@@ -57,19 +57,20 @@ class Subscription extends \Nethgui\Controller\CompositeController
         
         $apiUrl = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','ApiUrl');
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiUrl."machine/info/");
+        curl_setopt($ch, CURLOPT_URL, rtrim($apiUrl, '/') . "/machine/info/");
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: token $secret", "Content-type: application/json"));
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         if($http_code == 200) {
             $result = json_decode($response, true);
         } elseif($http_code == 401) {
             $result = json_decode($response, true);
         } else {
-            $this->getLog()->warning(sprintf("%s::%s() http status %s: %s", __CLASS__, __FUNCTION__, $http_code, $response));
+            $this->getLog()->warning(sprintf("%s::%s URL: %s, HTTP status %s: %s", __CLASS__, __FUNCTION__, $url, $http_code, $response));
             $result = FALSE;
         }
         curl_close($ch);
