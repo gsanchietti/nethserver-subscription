@@ -25,12 +25,18 @@
 # to restore the yum repositories configuration
 #
 
+configdb=/var/lib/nethserver/db/configuration
 tmpdir=$(mktemp -d /tmp/restore-yumrepos.XXXXXXX)
-trap "rm -rf ${tmpdir}" EXIT
+tmpdb=$(mktemp -u /var/lib/nethserver/db/configuration.XXXXXXXX)
+trap "rm -rf ${tmpdir} ; mv -vf ${tmpdb} ${configdb}" EXIT
 
 tar -x -C "${tmpdir}" -f /var/lib/nethserver/backup/backup-config.tar.xz  var/lib/nethserver/db/configuration
 
-export ESMITH_CONFIG_DB="${tmpdir}/var/lib/nethserver/db/configuration"
+# rename current db
+mv -f ${configdb} ${tmpdb}
+
+# copy db from backup
+cp -a "${tmpdir}/var/lib/nethserver/db/configuration" ${configdb}
 
 if [[ -z $(/sbin/e-smith/config getprop subscription SystemId) ]]; then
     exit 0;
