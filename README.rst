@@ -16,7 +16,8 @@ Configuration is stored inside the ``configuration`` database under the ``subscr
 Properties:
 
 - ``AlertsUrl``: URL used to send alerts and heartbeat
-- ``AlertsAutoUpdates``: if set to ``enabled``, custom alerts will be downloaded each night from ``AlertsUrl``.
+- ``AlertsAutoUpdates``: if set to ``enabled``, custom alerts will be downloaded each night from ``AlertsAutoUpdatesUrl``.
+- ``AlertsAutoUpdatesUrl``: URL used to fetch custom alerts database
 - ``ApiUrl``: URL called from the UI to retrieve subscription plan informations
 - ``InventoryUrl``: API endpoint where the data are sent
 - ``NsRelease``: exact NethServer release request to mirrorlist
@@ -43,12 +44,14 @@ Configuration
 * **NethServer Subscriptions** (by Nethesis) -- run ::
 
   config setprop subscription AlertsUrl https://my.nethserver.com/api/machine/
+  config delprop subscription AlertsAutoUpdatesUrl
   config setprop subscription InventoryUrl https://my.nethserver.com/api/machine/inventories/store/
   signal-event nethserver-subscription-update
 
 * **NethServer Enterprise partner program** (by Nethesis) -- run ::
 
-  config setprop subscription AlertsUrl https://my.nethesis.it/api/
+  config setprop subscription AlertsUrl https://my.nethesis.it/isa/
+  config setprop subscription AlertsAutoUpdatesUrl https://my.nethesis.it/api/
   config setprop subscription InventoryUrl https://my.nethesis.it/isa/inventory/store/
   signal-event nethserver-subscription-update
 

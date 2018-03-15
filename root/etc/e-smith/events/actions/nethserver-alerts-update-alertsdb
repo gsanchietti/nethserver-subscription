@@ -23,7 +23,11 @@
 # Retrieve customized alerts configuration
 
 SYSTEMID=$(/sbin/e-smith/config getprop subscription SystemId)
-URL=$(/sbin/e-smith/config getprop subscription AlertsUrl)
+URL=$(/sbin/e-smith/config getprop subscription AlertsAutoUpdatesUrl)
+
+if [[ -z ${URL} ]]; then
+    exit 0
+fi
 
 TMPJSON=$(mktemp --tmpdir alerts-XXXXXXX.json)
 TMPDB=$(mktemp --tmpdir alerts-XXXXXXX.db)
