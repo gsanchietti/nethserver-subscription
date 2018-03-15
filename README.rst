@@ -43,13 +43,13 @@ Configuration
 * **NethServer Subscriptions** (by Nethesis) -- run ::
 
   config setprop subscription AlertsUrl https://my.nethserver.com/api/machine/
-  config setprop subscription InventoryUrl https://my.nethserver.com/api/machine/inventories/store
+  config setprop subscription InventoryUrl https://my.nethserver.com/api/machine/inventories/store/
   signal-event nethserver-subscription-update
 
 * **NethServer Enterprise partner program** (by Nethesis) -- run ::
 
-  config setprop subscription AlertsUrl https://my.nethesis.it/isa
-  config setprop subscription InventoryUrl https://my.nethesis.it/isa/inventory/store
+  config setprop subscription AlertsUrl https://my.nethesis.it/api/
+  config setprop subscription InventoryUrl https://my.nethesis.it/isa/inventory/store/
   signal-event nethserver-subscription-update
 
 
