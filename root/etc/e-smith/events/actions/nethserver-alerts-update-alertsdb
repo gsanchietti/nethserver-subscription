@@ -25,30 +25,29 @@
 SYSTEMID=$(/sbin/e-smith/config getprop subscription SystemId)
 URL=$(/sbin/e-smith/config getprop subscription AlertsUrl)
 
-ALERTSDBJSON=$(/usr/bin/curl -s "https://$URL/customalerts/configuration?system_key=$SYSTEMID")
-RES1=$?
+TMPJSON=$(mktemp --tmpdir alerts-XXXXXXX.json)
+TMPDB=$(mktemp --tmpdir alerts-XXXXXXX.db)
 
-if [[ $RES1 == 0 ]] ; then
-    # create temp db file
-    TMPDB=$(mktemp)
-    /sbin/e-smith/db $TMPDB setjson "$ALERTSDBJSON"
-    RES2=$?
+trap "rm -f ${TMPJSON} ${TMPDB}" EXIT
 
-    # compare temp db file with alerts db
-    if [[ $(/sbin/e-smith/db $TMPDB show | md5sum) != $(/sbin/e-smith/db alerts show | md5sum) ]] ; then
-        # temp db differs from alerts db
-        mv $TMPDB /var/lib/nethserver/db/alerts
-    else
-        # db isn't changed
-        rm $TMPDB
-    fi
-    if [ -f /var/lib/nethserver/db/alerts ]; then
-        /usr/bin/chown root:adm /var/lib/nethserver/db/alerts
-    fi
+curl -s "${URL}/customalerts/configuration?system_key=$SYSTEMID" > ${TMPJSON}
+if [[ $? != 0 ]]; then
+    echo "[ERROR] customalerts remote HTTP call failed"
+    exit 1
 fi
 
-if [[ $RES1 == 0 && $RES2 == 0 ]]; then
-    exit 0
-else
+/sbin/e-smith/db $TMPDB setjson - <${TMPJSON}
+if [[ $? != 0 ]]; then
+    echo "[ERROR] failed to load custom alerts database"
     exit 1
+fi
+
+chown root:adm ${TMPDB}
+chmod 644 ${TMPDB}
+
+# compare temp db file with alerts db to avoid backup-config unnecessary runs
+if [[ $(/sbin/e-smith/db $TMPDB show | md5sum) != $(/sbin/e-smith/db alerts show | md5sum) ]] ; then
+    # temp db differs from alerts db
+    echo "[NOTICE] commit alerts DB differences"
+    mv ${TMPDB} /var/lib/nethserver/db/alerts
 fi
