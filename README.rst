@@ -67,6 +67,20 @@ initial state and use the original NethServer repositories run ::
   signal-event nethserver-subscription-update
   eorepo base updates extras epel centos-sclo-rh centos-sclo-sclo nethserver-base nethserver-updates
 
+Events
+======
+
+* ``nethserver-subscription-update`` standard update event; it runs on new 
+  installation and subsequent updates
+* ``nethserver-subscription-save`` runs when the registration token is set from 
+  the UI, altering the YUM repository configuration
+* ``restore-yumrepos`` runs during ``pre-restore-config`` event. Actions and
+  templates bound to it run in a temporary environment where the
+  ``configuration`` DB is extracted from the configuration backup and temporarily
+  applied to the system. It occurs before automatic installation of packages 
+  from the backup set. It is the point where the YUM configuration is restored to 
+  make subscribed repositories immediately available.
+
 
 Alerts
 ======
