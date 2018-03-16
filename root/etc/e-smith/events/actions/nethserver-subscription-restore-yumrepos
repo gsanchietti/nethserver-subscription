@@ -28,7 +28,7 @@
 configdb=/var/lib/nethserver/db/configuration
 tmpdir=$(mktemp -d /tmp/restore-yumrepos.XXXXXXX)
 tmpdb=$(mktemp -u /var/lib/nethserver/db/configuration.XXXXXXXX)
-trap "rm -rf ${tmpdir} ; mv -vf ${tmpdb} ${configdb}" EXIT
+trap "mv -vf ${tmpdb} ${configdb} ; rm -rf ${tmpdir}" EXIT
 
 tar -x -C "${tmpdir}" -f /var/lib/nethserver/backup/backup-config.tar.xz  var/lib/nethserver/db/configuration
 
@@ -38,10 +38,15 @@ mv -f ${configdb} ${tmpdb}
 # copy db from backup
 cp -a "${tmpdir}/var/lib/nethserver/db/configuration" ${configdb}
 
-if [[ -z $(/sbin/e-smith/config getprop subscription SystemId) ]]; then
+systemId=$(/sbin/e-smith/config getprop subscription SystemId)
+if [[ -z ${systemId} ]]; then
+    systemId=$(/sbin/e-smith/config getprop nethupdate SystemID)
+fi
+
+if [[ -z ${systemId} ]]; then
     exit 0;
 fi
 
-echo "[NOTICE] This system has a subscription. Restoring YUM repository configuration"
+echo "[NOTICE] This system is subscribed as ${systemId}. Restoring YUM repository configuration"
 /sbin/e-smith/signal-event restore-yumrepos
 

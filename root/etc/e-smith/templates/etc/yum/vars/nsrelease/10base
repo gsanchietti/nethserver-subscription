@@ -2,10 +2,10 @@
     #
     # 10base
     #
-    $systemId = $subscription{'SystemId'} || "";
+    $systemId = $subscription{'SystemId'} || $nethupdate{'SystemID'} || "";
 
     if ($systemId ne "") {
-        $OUT = $subscription{'NsRelease'};
+        $OUT = $subscription{'NsRelease'} || $nethupdate{'NsRelease'} || '';
     } else {
         $OUT = '';
     }
