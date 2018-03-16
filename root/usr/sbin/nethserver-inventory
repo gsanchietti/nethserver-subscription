@@ -95,11 +95,8 @@ trap "{ rm -f $TMP; }" SIGINT SIGTERM EXIT
 
 echo "{\"data\": {\"lk\": \"$systemid\", \"data\": $json}}" > $TMP
 
-code=`/usr/bin/curl $debug -L -w "%{http_code}" -X POST \
+/usr/bin/curl $debug -L -X POST \
    --header "Authorization: token $secret" $auth --header "Content-Type: application/json" --header "Accept: application/json"  \
-   --data-binary @$TMP \
-   $url`
+   --data-binary @$TMP $url
 
-if [ "$code" != "200" ]; then
-   exit 1
-fi
+exit 0
