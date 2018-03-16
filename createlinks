@@ -148,7 +148,8 @@ event_templates('restore-yumrepos', qw(
 ));
 
 event_actions('restore-yumrepos', qw(
-    nethserver-subscription-eorepo
+    nethserver-subscription-eorepo 30
+    nethserver-subscription-yum-cleanall 32
 ));
 
 #
