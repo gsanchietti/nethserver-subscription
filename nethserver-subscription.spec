@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.0.0
+Version: 3.0.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -65,6 +65,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Thu Mar 29 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.0.1-1
+- ns6upgrade cannot access Enterprise repositories - Bug Nethesis/dev#5364
+
 * Mon Mar 19 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.0.0-1
 - Implement clients for NethServer Subscriptions - NethServer/dev#5425
 
