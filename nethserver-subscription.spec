@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.0.3
+Version: 3.1.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -65,6 +65,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Wed May 30 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.1.0-1
+- Software update policy API - NethServer/dev#5505
+
 * Mon May 21 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.0.3-1
 - Release NS 7.5.1804
 
