@@ -25,6 +25,7 @@ use esmith::ConfigDB;
 use IO::Socket::UNIX;
 
 my $backup = $ARGV[0] || '';
+my $log = $ARGV[1] || '';
 my $exit_code = $ARGV[2] || '';
 
 my $severity = ($exit_code eq 0 or $exit_code eq '') ? 'okay' : 'failure';
