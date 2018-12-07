@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.2.0
+Version: 3.2.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -65,6 +65,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Fri Dec 07 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.2.1-1
+- Repository metadata GPG signature - NethServer/dev#5664
+
 * Wed Dec 05 2018 Davide Principi <davide.principi@nethesis.it> - 3.2.0-1
 - Bump distro version 7.6.1810
 - New firmware fact -- NethServer/nethserver-subscription#17
