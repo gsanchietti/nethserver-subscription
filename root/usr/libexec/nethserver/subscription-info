@@ -26,7 +26,9 @@
 # Usage: subscription-info <secret>
 #
 
-. /etc/profile.d/nethserver_proxy.sh
+if [ -f /etc/profile.d/nethserver_proxy.sh ]; then
+    . /etc/profile.d/nethserver_proxy.sh
+fi
 
 secret=$1
 
