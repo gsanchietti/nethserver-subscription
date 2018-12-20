@@ -31,14 +31,9 @@ class Subscription extends \Nethgui\Controller\CompositeController
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $attributes)
     {
-        // currently this module is available only for Community
-        if ( ! @file_exists("/etc/e-smith/db/configuration/defaults/nethupdate/type")) {
-            return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
-                'category' => 'Administration')
-            );
-        } else {
-            return new \NethServer\Tool\CustomModuleAttributesProvider($attributes);
-        }
+        return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
+            'category' => 'Administration')
+        );
     }
 
     public function initialize()
