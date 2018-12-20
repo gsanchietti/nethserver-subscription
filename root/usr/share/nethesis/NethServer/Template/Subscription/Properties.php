@@ -3,13 +3,15 @@
 echo $view->header()->setAttribute('template', $T('Subscription_header'));
 
 $printPlanInfo = function ($label, $value) use ($T, $view) {
-    echo "<div><span class='label'>" . htmlspecialchars($T($label)) . ": </span>";
-    echo $view->textLabel($value)->setAttribute('class', 'strong');
-    echo "</div>\n";
+    if (isset($view[$value]) && $view[$value]) {
+        echo "<div><span class='label'>" . htmlspecialchars($T($label)) . ": </span>";
+        echo $view->textLabel($value)->setAttribute('class', 'strong');
+        echo "</div>\n";
+    }
 };
 
 echo "<div class='subscriptionInfo'>";
-$printPlanInfo('SystemId_label', 'SystemId');
+echo "<div><span class='label'>" . htmlspecialchars($T('SystemId_label')) . ": </span>".$view->textLabel('SystemId')->setAttribute('class', 'strong')."</div>\n";
 $printPlanInfo('Created_label', 'Created');
 $printPlanInfo('PublicIp_label', 'PublicIp');
 echo "<div style='height: 20px'></div>";
