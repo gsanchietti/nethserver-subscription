@@ -31,8 +31,15 @@ class Subscription extends \Nethgui\Controller\CompositeController
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $attributes)
     {
+        $url = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
+        if (strpos($url, 'nethesis') !== false) {
+            $languageCatalog = "NethServer_Module_Register";
+        } else {
+            $languageCatalog = "NethServer_Module_Subscription";
+        }
         return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
-            'category' => 'Administration')
+            'category' => 'Administration',
+            'languageCatalog' => $languageCatalog)
         );
     }
 
