@@ -2,6 +2,11 @@
 
 $subUrl = $view->getModuleUrl('/Subscription');
 
+# Skip tile for enterprise installations
+if ($view['enterprise']) {
+    return '';
+}
+
 echo "<div class='dashboard-item'>";
 echo $view->header()->setAttribute('template',$T('community_title'));
    echo "<div>";

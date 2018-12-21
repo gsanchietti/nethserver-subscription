@@ -32,7 +32,20 @@ class Subscription extends \Nethgui\Controller\AbstractController
 
     private $systemId; 
     private $subscriptionPlan;
- 
+
+    protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $attributes)
+    {
+        $url = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
+        if (strpos($url, 'nethesis') !== false) {
+            $languageCatalog = "NethServer_Module_Register";
+        } else {
+            $languageCatalog = "NethServer_Module_Dashboard_SystemStatus_Subscription";
+        }
+        return new \NethServer\Tool\CustomModuleAttributesProvider($attributes, array(
+            'languageCatalog' => $languageCatalog)
+        );
+    }
+
     private function readSystemId()
     {
         if (!$this->systemId) {
@@ -45,9 +58,11 @@ class Subscription extends \Nethgui\Controller\AbstractController
     {
         $this->readSystemId();
     }
- 
+
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
+        $url = $this->getPlatform()->getDatabase('configuration')->getProp('subscription','PricingUrl');
         $view['SystemId'] = $this->readSystemId();
+        $view['enterprise'] = strpos($url, 'nethesis');
     }
 }
