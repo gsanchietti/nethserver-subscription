@@ -1,7 +1,8 @@
 {
     $systemId = $subscription{'SystemId'} || "";
     $secret = $subscription{'Secret'} || "";
-    $enabled = ($systemId ne "" && $secret ne "") ? 1 : 0;
+    $url = $subscription{'PricingUrl'} || "";
+    $enabled = ($systemId ne "" && $secret ne "" && $url !~ m/nethesis/) ? 1 : 0;
     '';
 }
 [sb-base]
