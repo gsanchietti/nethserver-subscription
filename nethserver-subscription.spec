@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.3.1
+Version: 3.3.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -66,6 +66,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Fri Jan 11 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.3.2-1
+- Make sure subscription.repo is disabled - NethServer/dev#5676
+
 * Thu Jan 10 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.3.1-1
 - Subscription: implement unsubscribe - NethServer/dev#5688
 
