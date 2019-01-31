@@ -4,7 +4,7 @@ Facter.add('backup') do
     confine osfamily: 'RedHat'
     setcode do
         backup = {}
-        backup_status = Facter::Core::Execution.exec('/sbin/e-smith/config getprop backup-data status')
+        backup_status = Facter::Core::Execution.exec('/sbin/e-smith/db backups getprop backup-data status')
         if backup_status == 'enabled'
             # Find most recent log file
             log_file = Dir.glob("/var/log/backup/backup-backup-data-*").max_by {|f| File.mtime(f)}
