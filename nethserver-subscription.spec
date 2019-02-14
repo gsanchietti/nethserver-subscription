@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.3.3
+Version: 3.3.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -66,6 +66,10 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Thu Feb 14 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.3.4-1
+- hide PSK content: PSK is a sensitive content which must be redacted - nethserver-subscription#22
+- fix backup info type: the value was read from obsolete configuration key - nethserver-subscription#22
+
 * Thu Jan 31 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.3.3-1
 - Remove single backup data - NethServer/dev#5691
 
