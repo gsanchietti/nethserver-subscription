@@ -142,3 +142,11 @@ event_templates('software-repos-save', qw(
 event_actions('post-restore-data', qw(
     nethserver-inventory-send 95
 ));
+
+
+#
+# system-init event
+#
+event_actions('system-init', qw(
+    nethserver-subscription-eorepo 95
+));
