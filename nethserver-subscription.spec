@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.3.4
+Version: 3.4.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -66,6 +66,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Fri Feb 22 2019 Davide Principi <davide.principi@nethesis.it> - 3.4.0-1
+- Ultimate software origin policy - NethServer/dev#5704
+
 * Thu Feb 14 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.3.4-1
 - hide PSK content: PSK is a sensitive content which must be redacted - nethserver-subscription#22
 - fix backup info type: the value was read from obsolete configuration key - nethserver-subscription#22
