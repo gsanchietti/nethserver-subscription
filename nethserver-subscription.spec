@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.4.1
+Version: 3.5.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -66,6 +66,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Tue Oct 01 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.5.0-1
+- New NethServer 7.7.1908 defaults - NethServer/dev#5831
+
 * Wed Mar 06 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.4.1-1
 - Restore config regression with ultimate software origin policy - Bug NethServer/dev#5724
 
