@@ -7,8 +7,6 @@ URL: %{url_prefix}/%{name}
 Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
-Provides: nethserver-inventory = %{version}
-Obsoletes: nethserver-inventory < %{version}
 Provides: nethserver-alerts = %{version} 
 Obsoletes: nethserver-alerts < %{version}
 
@@ -22,8 +20,8 @@ Requires: nethserver-collectd
 Requires: nethserver-lib
 Requires: python-requests
 Requires: curl
-Requires: puppet-agent
 Requires: jq
+Requires: %{name}-inventory
 
 %description
 NethServer Subscriptions
@@ -38,8 +36,15 @@ mkdir -p root%{python2_sitelib}
 cp -a lib/nethserver_alerts.py root%{python2_sitelib}
 
 %install
-(cd root; find . -depth -print | cpio -dump %{buildroot})
-%{genfilelist} %{buildroot} > filelist
+(cd root; find . -depth -print | sed \
+        -e '\|/etc/cron.daily/nethserver-inventory| d' \
+        -e '\|/usr/sbin/nethserver-inventory| d' \
+        -e '\|/usr/sbin/ardad| d' \
+        -e '\|/etc/e-smith/events/actions/nethserver-inventory-send| d' \
+    | cpio -dump %{buildroot})
+%{genfilelist} \
+    --ignoredir '/opt' %{buildroot} \
+    > filelist
 
 # 1. Split UI parts from core package
 grep -E ^%{_nsuidir}/ filelist > filelist-ui
