@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.5.0
+Version: 3.5.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -71,6 +71,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Tue Oct 15 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.5.1-1
+- Nethserver-cockpit is not installable - Bug NethServer/arm-dev#32
+
 * Tue Oct 01 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.5.0-1
 - New NethServer 7.7.1908 defaults - NethServer/dev#5831
 

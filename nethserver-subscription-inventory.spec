@@ -2,7 +2,7 @@
 
 Summary: NethServer Subscriptions inventory agent
 Name: nethserver-subscription-inventory
-Version: 3.5.0
+Version: 3.5.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/nethserver-subscription
