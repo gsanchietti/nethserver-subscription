@@ -1,6 +1,6 @@
 Summary: NethServer Subscriptions
 Name: nethserver-subscription
-Version: 3.5.2
+Version: 3.5.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -71,6 +71,9 @@ NethServer Subscriptions UI
 %doc README.rst
 
 %changelog
+* Mon Nov 04 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.5.3-1
+- inventory: suppress backup warning (#29) - Nethserver/dev#5880
+
 * Fri Oct 25 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 3.5.2-1
 - Subscription: last backup not reported inside inventory - NethServer/dev#5880
 
