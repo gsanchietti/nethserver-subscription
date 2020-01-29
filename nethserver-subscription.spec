@@ -15,10 +15,8 @@ BuildRequires: gettext
 BuildRequires: python2-devel
 
 Requires: nethserver-base
-Requires: nethserver-yum-cron
 Requires: nethserver-collectd
-Requires: nethserver-lib
-Requires: python-requests
+Requires: python2-requests
 Requires: curl
 Requires: jq
 Requires: %{name}-inventory
